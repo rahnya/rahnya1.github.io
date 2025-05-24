@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Bubble Shooter HTML Game</title>
+  <meta charset="UTF-8">
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+    body {
+      background: black;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+  <canvas width="271" height="392" id="game"></canvas>
+  <script>
+    const canvas = document.getElementById('game');
+const context = canvas.getContext('2d');
+
+const grid = 32;
+const level1 = [
+  ['R','R','Y','Y','B','B','G','G'],
+  ['R','R','Y','Y','B','B','G'],
+  ['B','B','G','G','R','R','Y','Y'],
+  ['B','G','G','R','R','Y','Y']
+];
+const colorMap = {
+  'R': 'red',
+  'G': 'green',
+  'B': 'blue',
+  'Y': 'yellow'
+};
+const colors = Object.values(colorMap);
+
+const bubbleGap = 1;
+const wallSize = 4;
+const bubbles = [];
+let particles = [];
+    
+// helper function to convert deg to radians
+function degToRad(deg) {
+  return (deg * Math.PI) / 180;
+}
+function createBubble(x, y, color) {
+  const row = Math.floor(y / grid);
+  const col = Math.floor(x / grid);
+
+  // bubbles on odd rows need to start half-way on the grid
+  const startX = row % 2 === 0 ? 0 : 0.5 * grid;
+
+  // because we are drawing circles we need the x/y position
+  // to be the center of the circle instead of the top-left
+  // corner like you would for a square
+  const center = grid / 2;
+
+  bubbles.push({
+    x: wallSize + (grid + bubbleGap) * col + startX + center,
+
+    // the bubbles are closer on the y axis so we subtract 4 on every
+    // row
+    y: wallSize + (grid + bubbleGap - 4) * row + center,
+
+    radius: grid / 2,
+    color: color,
+    active: color ? true : false
+  });
+}
+function getNeighbors(bubble) {
+  const neighbors = [];
+
+  // check each of the 6 directions by "moving" the bubble by a full
+  // grid in each of the 6 directions (60 degree intervals)
+  // @see https://www.redblobgames.com/grids/hexagons/#angles
+  const dirs = [
+    // right
+    rotatePoint(grid, 0, 0),
+    // up-right
+    rotatePoint(grid, 0, degToRad(60)),
+    // up-left
+    rotatePoint(grid, 0, degToRad(120)),
+    // left
+    rotatePoint(grid, 0, degToRad(180)),
+    // down-left
+    rotatePoint(grid, 0, degToRad(240)),
+    // down-right
+    rotatePoint(grid, 0, degToRad(300))
+  ];
+
+  for (let i = 0; i < dirs.length; i++) {
+    const dir = dirs[i];
+
+    const newBubble = {
+      x: bubble.x + dir.x,
+      y: bubble.y + dir.y,
+      radius: bubble.radius
+    };
+    const neighbor = getClosestBubble(newBubble, true);
+    if (neighbor && neighbor !== bubble && !neighbors.includes(neighbor)) {
+      neighbors.push(neighbor);
+    }
+  }
+
+  return neighbors;
+}
+
+// remove bubbles that create a match of 3 colors
+function removeMatch(targetBubble) {
+  const matches = [targetBubble];
+
+  bubbles.forEach(bubble => bubble.processed = false);
+  targetBubble.processed = true;
+
+  // loop over the neighbors of matching colors for more matches
+  let neighbors = getNeighbors(targetBubble);
+  for (let i = 0; i < neighbors.length; i++) {
+    let neighbor = neighbors[i];
+
+    if (!neighbor.processed) {
+      neighbor.processed = true;
+
+      if (neighbor.color === targetBubble.color) {
+        matches.push(neighbor);
+        neighbors = neighbors.concat(getNeighbors(neighbor));
+      }
+    }
+  }
+
+  if (matches.length >= 3) {
+    matches.forEach(bubble => {
+      bubble.active = false;
+    });
+  }
+}
+
+// make any floating bubbles (bubbles that don't have a bubble chain
+// that touch the ceiling) drop down the screen
+function dropFloatingBubbles() {
+  const activeBubbles = bubbles.filter(bubble => bubble.active);
+  activeBubbles.forEach(bubble => bubble.processed = false);
+
+  // start at the bubbles that touch the ceiling
+  let neighbors = activeBubbles
+    .filter(bubble => bubble.y - grid <= wallSize);
+
+  // process all bubbles that form a chain with the ceiling bubbles
+  for (let i = 0; i < neighbors.length; i++) {
+    let neighbor = neighbors[i];
+
+    if (!neighbor.processed) {
+      neighbor.processed = true;
+      neighbors = neighbors.concat(getNeighbors(neighbor));
+    }
+  }
+// game loop
+function loop() {
+  requestAnimationFrame(loop);
+  context.clearRect(0,0,canvas.width,canvas.height);
+
+  // move the shooting arrow
+  shootDeg = shootDeg + degToRad(2) * shootDir;
+
+  // prevent shooting arrow from going below/above min/max
+  if (shootDeg < minDeg) {
+    shootDeg = minDeg;
+  }
+  else if (shootDeg > maxDeg) {
+    shootDeg = maxDeg
+  }
+
+  // move current bubble by it's velocity
+  curBubble.x += curBubble.dx;
+  curBubble.y += curBubble.dy;
+
+  // prevent bubble from going through walls by changing its velocity
+  if (curBubble.x - grid / 2 < wallSize) {
+    curBubble.x = wallSize + grid / 2;
+    curBubble.dx *= -1;
+  }
+  else if (curBubble.x + grid / 2 > canvas.width - wallSize) {
+    curBubble.x = canvas.width - wallSize - grid / 2;
+    curBubble.dx *= -1;
+  }
+
+  // check to see if bubble collides with the top wall
+  if (curBubble.y - grid / 2 < wallSize) {
+    // make the closest inactive bubble active
+    const closestBubble = getClosestBubble(curBubble);
+    handleCollision(closestBubble);
+  }
+
+  // check to see if bubble collides with another bubble
+  for (let i = 0; i < bubbles.length; i++) {
+    const bubble = bubbles[i];
+
+    if (bubble.active && collides(curBubble, bubble)) {
+      const closestBubble = getClosestBubble(curBubble);
+      if (!closestBubble)  {
+        window.alert('Game Over');
+        window.location.reload();
+      }
+
+      if (closestBubble) {
+        handleCollision(closestBubble);
+      }
+    }
+  }
+
+let shootDeg = 0;
+
+// min/max angle (in radians) of the shooting arrow
+const minDeg = degToRad(-60);
+const maxDeg = degToRad(60);
+
+// the direction of movement for the arrow (-1 = left, 1 = right)
+let shootDir = 0;
+  // move the shooting arrow
+  shootDeg = shootDeg + degToRad(2) * shootDir;
+
+  // prevent shooting arrow from going below/above min/max
+  if (shootDeg < minDeg) {
+    shootDeg = minDeg;
+  }
+  else if (shootDeg > maxDeg) {
+    shootDeg = maxDeg
+  }
+
+if (e.key === 'a') {
+    shootDir = -1;
+  }
+  else if (e.key === 'd') {
+    shootDir = 1;
+  }
+  
+  // if the current bubble is not moving we can launch it
+  if (e.code === 'Space' &&  curBubble.dx === 0 && curBubble.dy === 0) {
+    // convert an angle to x/y
+    curBubble.dx = Math.sin(shootDeg) * curBubble.speed;
+    curBubble.dy = -Math.cos(shootDeg) * curBubble.speed;
+  }
+
+  </script>
+</body>
+</html>
