@@ -14,13 +14,16 @@
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      overflow:hidden
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
     .signature {
       font-size: 1.3rem;
-      font-style:italic;
+      font-style: italic;
       color: #6d5dac;
-      align-self:flex-end;
+      align-self: flex-end;
       margin-top: 20px;
       opacity: 0;
       transform: translateY(20px);
@@ -30,12 +33,12 @@
       position: absolute;
       bottom: 20px;
       font-size: 0.9rem;
-      color:#777;
-      opacity:0;
+      color: #777;
+      opacity: 0;
       animation: fadeIn 1s ease forwards 1.7s;
     }
     @keyframes fadeIn {
-      to{
+      to {
         opacity: 1;
         transform: translateY(0);
       }
@@ -43,39 +46,39 @@
     .flower-container {
       position: absolute;
       width: 100%;
-      height:100%;
+      height: 100%;
       pointer-events: none;
     }
     .flower {
-      position:absolute;
+      position: absolute;
       opacity: 0;
     }
     .flower1 {
       top: 10%;
-      left:10%;
+      left: 10%;
       animation: floatAnimation 8s ease-in-out infinite, fadeInOut 8s ease-in-out infinite;
     }
     .flower2 {
       top: 15%;
-      right:10%;
+      right: 10%;
       animation: floatAnimation 7s ease-in-out infinite, fadeInOut 7s ease-in-out infinite;
     }
     .flower3 {
       bottom: 15%;
-      left:15%;
+      left: 15%;
       animation: floatAnimation 9s ease-in-out infinite, fadeInOut 8.5s ease-in-out infinite;
     }
     @keyframes floatAnimation {
       0%, 100% {
         transform: translateY(0) rotate(0deg);
       }
-      25%{
+      25% {
         transform: translateY(-15px) rotate(5deg);
       }
-      50%{ 
+      50% { 
         transform: translateY(0) rotate(0deg);
       }
-      75%{ 
+      75% { 
         transform: translateY(15px) rotate(-5deg);
       }
     }
@@ -97,7 +100,7 @@
       z-index: 10;
     }
     .heart-btn:hover {
-      transform:scale(1.1);
+      transform: scale(1.1);
     }
     .heart-btn:focus {
       outline: none;
@@ -112,28 +115,28 @@
       transition: fill 0.3s ease;
     }
     .heart-btn:hover .heart-path {
-      fill: ff66b95;
+      fill: #ff66b9;
     }
     .confetti {
       position: absolute;
       width: 10px;
       height: 10px; 
       background-color: #f00;
-      opacity:0;
+      opacity: 0;
     }
     @keyframes confettifall {
       0% {
-        transform: translateY(-100px) rotate(0deg0);
+        transform: translateY(-100px) rotate(0deg);
         opacity: 1;
       }
       100% {
-        transform: translateY(600px) rotate(360deg0);
+        transform: translateY(600px) rotate(360deg);
         opacity: 0;
       }
     }
     .photo-frame {
-      width:180px;
-      height:180px; 
+      width: 180px;
+      height: 180px; 
       border-radius: 50px; 
       background: linear-gradient(135deg, #3a7bd5, #6d5dac);
       padding: 10px;
@@ -143,13 +146,13 @@
       transform: scale(0.8);
       animation: scaleIn 1s ease forwards 0.2s;
     }
-    @keyframes sacleIn {
-      to{
+    @keyframes scaleIn {
+      to {
         opacity: 1;
         transform: scale(1);
       }
     }
-    .photo{
+    .photo {
       width: 100%;
       height: 100%;
       border-radius: 50%;
@@ -168,7 +171,7 @@
       top: 20px;
       left: 20px;
       background: none;
-      color:#6d5dac;
+      color: #6d5dac;
       font-size: 1rem;
       cursor: pointer;
       display: flex;
@@ -189,160 +192,34 @@
 <body>
   <div class="card">
     <div class="card-front">
-      <div class=".flower-container">
+      <div class="flower-container">
         <svg class="flower flower1" width="60" height="60" viewBox="0 0 60 60">
-          <path d="M30,10 Q40, 0 50, 10 170,10 Q80,0 90,10 f110,10" fill="none" stroke="#6d5dac" stroke-width="2"/>
           <circle cx="30" cy="30" r="15" fill="#9370DB"/>
           <circle cx="30" cy="30" r="10" fill="#6d5dac"/>
           <circle cx="30" cy="30" r="5" fill="#3a7bd5"/>
         </svg>
         <svg class="flower flower2" width="50" height="50" viewBox="0 0 50 50">
-          <path d="M25,5 Q35, 0 45,5 T65,5 Q75,0 85,5 T105,5" fill="none" stroke="#6d5dac" stroke-width="2"/>
           <circle cx="25" cy="25" r="12" fill="#6d5dac"/>
           <circle cx="25" cy="25" r="8" fill="#9370DB"/>
           <circle cx="25" cy="25" r="4" fill="#3a7bd5"/>
         </svg>
         <svg class="flower flower3" width="55" height="55" viewBox="0 0 55 55">
-          <path d="M27,5,7,5 Q37.5,0 47.5,7,5 T67.5,7.5 Q77.5,0 87.5,7.5 T107.5,7.5" fill="none" stroke="#9370DB" stroke-width="2"/>
           <circle cx="27.5" cy="27.5" r="13" fill="#3a7bd5"/>
           <circle cx="27.5" cy="27.5" r="9" fill="#6d5dac"/>
           <circle cx="27.5" cy="27.5" r="5" fill="#9370DB"/>
-        </svg>  
+        </svg>
       </div>
       <div class="photo-frame">
         <div class="photo">
           <svg viewBox="0 0 100 100">
-            <path d="M50,30 Q65,10 80,30 T110,30 Q125,10 140,30" fill="none" stroke="#6d5dac" stroke-width="2"/>
-            <circle cx="50" cy="40" r="30" fill="#f5f7fa"/>
+            <circle cx="50" cy="50" r="30" fill="#f5f7fa"/>
             <circle cx="40" cy="35" r="9" fill="#6d5dac"/>
             <circle cx="60" cy="35" r="3" fill="#6d5dac"/>
-            <path d="M40,50 Q50,60 60,50" fill="none" stroke="#6d5dac" stroke-width="2" stroke-linecap-"round"/>
-          </svg>  
+          </svg>
         </div>
       </div>
       <h1 class="title">Bonne Fête Maman</h1>
       <p class="subtitle">Avec tout mon love</p>
       <button class="heart-btn" id="heart-Btn">
         <svg class="heart-path" viewBox="0 0 24 24">
-          <path class="heart-path" d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5, 3C9.24,3 10.91,3.81 12,5.09C13.09,3.8.1"/>
-        </svg>  
-      </button>
-      <p class="instruction"> Clique sur le coeur pour une surprise, ou juste touche la carte pour la retourner</p>
-    </div>
-    <div class="card-back">
-      <button class="heart-btn" id="heart-Btn">
-        <svg viewBox="0 0 24 24">
-          <path fill="curentColor" d="M20,11V13H8L13.5,18.5L12.88,19.92L4.36,12L12.08,4.08L13.5,5.5L0,11H20Z"/>
-        </svg>  
-        Retour
-      </button>
-      <h2 class="title">Ma mamoune</h2>
-      <div class="message"> 
-        <p> Pour tous ces moments de tendresse, <br>
-          Pour ton amour et ta sagesse, <br>
-          Et ton sourire eternel.
-        </p>
-        <p> Merci d'être la mamn extraordinaire que tu es <br>
-          Je t'aime infiniment<br>
-        </p>
-      </div>
-      <p class="signature"> 
-        Avec tout mon amour
-      </p>
-    </div>
-  </div>
-  <script>
-    document.addEventListener('DOMContentLoaded', function(){
-      const card = document.querySelector('card');
-      const heartBtn = document.getElementById('heartBtn');
-      const backBtn = document.getElementById('backBtn');
-     //Tourne la carte
-      card.addEventListener('click', function(e) {
-        if (e.target !== heartBtn && !heartBtn.contains(e.target)) {
-          card.cardList.toggle("open");
-        }
-      });
-      //Retourner la carte
-      backBtn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        card.cardList.remove('open');
-      });
-      //Click au bouton coeur -créer les confettis
-      heartBtn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        createConfetti();
-      });
-      function createConfetti() {
-        const colors = ['#3a7bd5', '#937808', '#6d5dac', '#ff6b95', '#f5f7fa'];
-        const shapes = ['circle', 'square', 'triangle'];
-
-        for (let i=0; i < 50; i++) {
-          setTimeout(() => {
-            const confetti = document.createElement('div');
-            confetti.className = 'confetti';
-
-            //Position aléatoire
-            const posX = Math.random() * window.innerWidth;
-            confetti.style.left = posX + 'px';
-
-            // Couleur aléatoire
-            const color = colors[Math.floor(Maths.random() * colors.length)];
-            confetti.style.backgroundColor = color;
-
-            //Forme aléatoire 
-            constshape = shapes[Math.floor(Math.random() * shapes.length)];
-            if (shape === 'circle') {
-              confetti.style.borderRadius = '50%';
-            } else if (shape === 'triangle') {
-              confetti.style.width = '0';
-              confetti.style.height = '0';
-              confetti.style.backgroundColor = 'transparent';
-              confetti.style.borderLeft = '5px solid transparent';
-              confetti.style.borderRight = '5px solid transparent';
-              confetti.style.borderBottom = '10px solid' + color;
-            }
-            // Taille aléatoire 
-            const siez = Math.random() * 10 + 5;
-            confetti.style.width = size + "px"; 
-            confetti.style.height = size + "px"; 
-
-            //Rotation aléatoire 
-            const rotation = Math.random() * 360;
-            confetti.style.transform = 'rotate($(rotation)deg)';
-
-            //Animation 
-            const duration = Math.random() * 3 + 2;
-            confetti.style.animation = 'confettiFall $(duration)s ease forwards';
-
-            document.body.appendChild(confetti);
-
-            //Bouger après l'animation
-            setTimeout(()=> {
-              document.body.removeChild(confetti);
-            }, duration + 100);
-          }, i * 50);
-        }
-
-        //Faire battre le couer 
-        heartBtn.style.animation = 'none';
-        setTimeout(() => {
-          heartBtn?.style.animation = 'heartBeat 0.5s ease';
-        }, 10);
-      }
-      
-      //Ajouter l'animation coeur qui bat
-      const style = document.createElement('style');
-      style.textContent = "
-        @keyframes heartBeat {
-          0% { transform: scale(1); }
-          25% { transform: scale(1.3); }
-          50% { transform: scale(1); }
-          75% { transform: scale(1.3); }
-          100% { transform: scale(1); }
-        }
-      ";
-      document.head.appendChild(style);
-    ]);
-  </script>
-</body>
-</html>
+          <path class="heart-path" d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 
