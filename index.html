@@ -11,27 +11,60 @@
       box-sizing: border-box;
     }
     body {
+      display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
+      background: #f5f7fa;
       overflow: hidden;
+    }
+    .card {
+      width: 300px;
+      height: 400px;
+      position: relative;
+      background: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+      transform-style: preserve-3d;
+      transition: transform 0.5s;
+    }
+    .card.open {
+      transform: rotateY(180deg);
+    }
+    .card-front, .card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .card-back {
+      transform: rotateY(180deg);
+      background: #f5f7fa;
+    }
+    .title {
+      font-size: 1.5rem;
+      color: #6d5dac;
+      margin-bottom: 10px;
+    }
+    .subtitle {
+      font-size: 1.1rem;
+      color: #6d5dac;
+      margin-bottom: 20px;
     }
     .signature {
-      font-size: 1.3rem;
+      font-size: 1.2rem;
       font-style: italic;
       color: #6d5dac;
-      align-self: flex-end;
       margin-top: 20px;
       opacity: 0;
-      transform: translateY(20px);
       animation: fadeIn 1s ease forwards 1.4s;
     }
     .instructions {
-      position: absolute;
-      bottom: 20px;
       font-size: 0.9rem;
       color: #777;
       opacity: 0;
@@ -40,70 +73,15 @@
     @keyframes fadeIn {
       to {
         opacity: 1;
-        transform: translateY(0);
       }
     }
-    .flower-container {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-    }
-    .flower {
-      position: absolute;
-      opacity: 0;
-    }
-    .flower1 {
-      top: 10%;
-      left: 10%;
-      animation: floatAnimation 8s ease-in-out infinite, fadeInOut 8s ease-in-out infinite;
-    }
-    .flower2 {
-      top: 15%;
-      right: 10%;
-      animation: floatAnimation 7s ease-in-out infinite, fadeInOut 7s ease-in-out infinite;
-    }
-    .flower3 {
-      bottom: 15%;
-      left: 15%;
-      animation: floatAnimation 9s ease-in-out infinite, fadeInOut 8.5s ease-in-out infinite;
-    }
-    @keyframes floatAnimation {
-      0%, 100% {
-        transform: translateY(0) rotate(0deg);
-      }
-      25% {
-        transform: translateY(-15px) rotate(5deg);
-      }
-      50% { 
-        transform: translateY(0) rotate(0deg);
-      }
-      75% { 
-        transform: translateY(15px) rotate(-5deg);
-      }
-    }
-    @keyframes fadeInOut {
-      0%, 100% {
-        opacity: 0.7;
-      }
-      50% {
-        opacity: 1;
-      }
-    }
-    .heart-btn { 
+    .heart-btn {
       position: absolute;
       bottom: 70px;
       background: none;
       border: none;
       cursor: pointer;
-      transition: transform 0.3s ease;
       z-index: 10;
-    }
-    .heart-btn:hover {
-      transform: scale(1.1);
-    }
-    .heart-btn:focus {
-      outline: none;
     }
     .heart-svg {
       width: 60px;
@@ -117,31 +95,17 @@
     .heart-btn:hover .heart-path {
       fill: #ff66b9;
     }
-    .confetti {
-      position: absolute;
-      width: 10px;
-      height: 10px; 
-      background-color: #f00;
-      opacity: 0;
-    }
-    @keyframes confettifall {
-      0% {
-        transform: translateY(-100px) rotate(0deg);
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(600px) rotate(360deg);
-        opacity: 0;
-      }
-    }
     .photo-frame {
       width: 180px;
-      height: 180px; 
-      border-radius: 50px; 
+      height: 180px;
+      border-radius: 50%;
       background: linear-gradient(135deg, #3a7bd5, #6d5dac);
       padding: 10px;
-      margin-bottom: 3px;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+      margin-bottom: 10px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+      display: flex;
+      justify-content: center;
+      align-items: center;
       opacity: 0;
       transform: scale(0.8);
       animation: scaleIn 1s ease forwards 0.2s;
@@ -160,11 +124,6 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      overflow: hidden;
-    }
-    .photo svg {
-      width: 80%;
-      height: 80%;
     }
     .back-btn {
       position: absolute;
@@ -187,28 +146,30 @@
       width: 20px;
       height: 20px;
     }
+    .confetti {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background-color: #f00;
+      opacity: 0;
+    }
+    @keyframes confettiFall {
+      0% {
+        transform: translateY(-100px) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(600px) rotate(360deg);
+        opacity: 0;
+      }
+    }
   </style>
 </head>
 <body>
   <div class="card">
     <div class="card-front">
-      <div class="flower-container">
-        <svg class="flower flower1" width="60" height="60" viewBox="0 0 60 60">
-          <circle cx="30" cy="30" r="15" fill="#9370DB"/>
-          <circle cx="30" cy="30" r="10" fill="#6d5dac"/>
-          <circle cx="30" cy="30" r="5" fill="#3a7bd5"/>
-        </svg>
-        <svg class="flower flower2" width="50" height="50" viewBox="0 0 50 50">
-          <circle cx="25" cy="25" r="12" fill="#6d5dac"/>
-          <circle cx="25" cy="25" r="8" fill="#9370DB"/>
-          <circle cx="25" cy="25" r="4" fill="#3a7bd5"/>
-        </svg>
-        <svg class="flower flower3" width="55" height="55" viewBox="0 0 55 55">
-          <circle cx="27.5" cy="27.5" r="13" fill="#3a7bd5"/>
-          <circle cx="27.5" cy="27.5" r="9" fill="#6d5dac"/>
-          <circle cx="27.5" cy="27.5" r="5" fill="#9370DB"/>
-        </svg>
-      </div>
+      <h1 class="title">Bonne Fête Maman</h1>
+      <p class="subtitle">Avec tout mon love</p>
       <div class="photo-frame">
         <div class="photo">
           <svg viewBox="0 0 100 100">
@@ -218,8 +179,98 @@
           </svg>
         </div>
       </div>
-      <h1 class="title">Bonne Fête Maman</h1>
-      <p class="subtitle">Avec tout mon love</p>
-      <button class="heart-btn" id="heart-Btn">
+      <button class="heart-btn" id="heartBtn">
         <svg class="heart-path" viewBox="0 0 24 24">
-          <path class="heart-path" d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 
+          <path d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.09C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.04L12,21.35Z"/>
+        </svg>  
+      </button>
+      <p class="instructions">Clique sur le cœur pour une surprise, ou touche la carte pour la retourner</p>
+    </div>
+
+    <div class="card-back">
+      <button class="back-btn" id="backBtn">
+        Retour
+      </button>
+      <h2 class="title">Ma mamoune</h2>
+      <div class="message"> 
+        <p>Pour tous ces moments de tendresse, <br>Pour ton amour et ta sagesse, <br>Et ton sourire éternel.</p>
+        <p>Merci d'être la maman extraordinaire que tu es <br>Je t'aime infiniment.</p>
+      </div>
+      <p class="signature">Avec tout mon amour</p>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const card = document.querySelector('.card');
+      const heartBtn = document.getElementById('heartBtn');
+      const backBtn = document.getElementById('backBtn');
+
+      // Tourner la carte
+      card.addEventListener('click', function(e) {
+        if (e.target !== heartBtn && !heartBtn.contains(e.target)) {
+          card.classList.toggle('open');
+        }
+      });
+
+      // Retourner la carte
+      backBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        card.classList.remove('open');
+      });
+
+      // Cliquer sur le cœur pour créer les confettis
+      heartBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        createConfetti();
+      });
+
+      // Fonction pour générer des confettis
+      function createConfetti() {
+        const colors = ['#3a7bd5', '#ff66b9', '#6d5dac', '#f5f7fa'];
+        const shapes = ['circle', 'square', 'triangle'];
+
+        for (let i = 0; i < 50; i++) {
+          setTimeout(() => {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+
+            // Position aléatoire
+            const posX = Math.random() * window.innerWidth;
+            confetti.style.left = posX + 'px';
+
+            // Couleur aléatoire
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.backgroundColor = color;
+
+            // Forme aléatoire
+            const shape = shapes[Math.floor(Math.random() * shapes.length)];
+            if (shape === 'circle') {
+              confetti.style.borderRadius = '50%';
+            } else if (shape === 'square') {
+              confetti.style.width = '15px';
+              confetti.style.height = '15px';
+            } else {
+              confetti.style.width = '0';
+              confetti.style.height = '0';
+              confetti.style.borderLeft = '5px solid transparent';
+              confetti.style.borderRight = '5px solid transparent';
+              confetti.style.borderBottom = '10px solid ' + color;
+            }
+
+            // Animation des confettis
+            confetti.style.animation = `confettiFall ${Math.random() * 3 + 4}s linear forwards`;
+
+            document.body.appendChild(confetti);
+
+            // Supprimer le confetti une fois l'animation terminée
+            confetti.addEventListener('animationend', function() {
+              confetti.remove();
+            });
+          }, i * 50);  // Décalage pour une meilleure dispersion
+        }
+      }
+    });
+  </script>
+</body>
+</html>
